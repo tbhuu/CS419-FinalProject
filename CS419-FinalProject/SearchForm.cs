@@ -15,23 +15,17 @@ namespace CS419_FinalProject
 {
     public partial class SearchForm : Form
     {
-
-        private Indexer myIndexer;
-        private SearchEngine mySearchEngine;
-
-        private string resourcePath = GlobalParameter.resourcesPath;
-        private int docCount = GlobalParameter.docCount;
+        IRSystem myIR = new IRSystem();
+        
         #region UILogic
         public SearchForm()
         {
             InitializeComponent();
-            
-            CreateTemporaryFolder();
 
-            if (PreviousRunExist())
+            if (myIR.PreviousRunExist())
             {
                 this.ChangeIRStatus(SearchForm.IRStatus.HasIndexing);
-                BuildSearchEngine();
+                myIR.BuildSearchEngine();
             }
             else
             {
@@ -70,8 +64,9 @@ namespace CS419_FinalProject
 
             //So the UI do not frozen
             Thread newThread = new Thread(() => {
-            BuildIndexer();
-            BuildSearchEngine();
+
+            myIR.BuildIndexer();
+            myIR.BuildSearchEngine();
 
             //Update UI thread from working thread
             Invoke((Action)delegate()
@@ -83,40 +78,16 @@ namespace CS419_FinalProject
 
             newThread.Start();
         }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            string text = textboxQuery.Lines[0].Trim();
+            List<SearchResult> result;
+            if (!text.Equals("")) {
+                result = myIR.SearchQuery(text);
+            }
+        }
         #endregion
-
-        private bool PreviousRunExist()
-        {
-            if (File.Exists(GlobalParameter.indexPath)
-                && File.Exists(GlobalParameter.indexMapPath)
-                && File.Exists(GlobalParameter.indexLengthPath))
-                return true;
-            return false;
-        }
-
-        public void BuildSearchEngine()
-        {
-            mySearchEngine = new SearchEngine(
-                GlobalParameter.indexPath,
-                GlobalParameter.indexMapPath,
-                GlobalParameter.indexLengthPath,
-                docCount,
-                //TODO: no groundtrust
-                "..//..//Resources//ohsumed.87");
-        }
-
-        public void BuildIndexer()
-        {
-            myIndexer = new Indexer(new SPIMIndexer(resourcePath));
-            docCount = myIndexer.Index();
-        }
-
-        private void CreateTemporaryFolder()
-        {
-            //Only create new if folder doesnot exist
-            Directory.CreateDirectory("SPIMI");
-            Directory.CreateDirectory("Resources");
-            Directory.CreateDirectory("Index");
-        }
+        
     }
 }

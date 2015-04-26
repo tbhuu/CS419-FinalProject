@@ -30,6 +30,8 @@
         {
             this.buttonRunIndexer = new System.Windows.Forms.Button();
             this.labelPreviousRunStatus = new System.Windows.Forms.Label();
+            this.textboxQuery = new System.Windows.Forms.TextBox();
+            this.buttonSearch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonRunIndexer
@@ -51,11 +53,30 @@
             this.labelPreviousRunStatus.TabIndex = 2;
             this.labelPreviousRunStatus.Text = "label1";
             // 
+            // textboxQuery
+            // 
+            this.textboxQuery.Location = new System.Drawing.Point(12, 41);
+            this.textboxQuery.Name = "textboxQuery";
+            this.textboxQuery.Size = new System.Drawing.Size(100, 20);
+            this.textboxQuery.TabIndex = 3;
+            // 
+            // buttonSearch
+            // 
+            this.buttonSearch.Location = new System.Drawing.Point(12, 67);
+            this.buttonSearch.Name = "buttonSearch";
+            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
+            this.buttonSearch.TabIndex = 4;
+            this.buttonSearch.Text = "Search";
+            this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            // 
             // SearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.buttonSearch);
+            this.Controls.Add(this.textboxQuery);
             this.Controls.Add(this.labelPreviousRunStatus);
             this.Controls.Add(this.buttonRunIndexer);
             this.Name = "SearchForm";
@@ -69,5 +90,7 @@
 
         private System.Windows.Forms.Button buttonRunIndexer;
         private System.Windows.Forms.Label labelPreviousRunStatus;
+        private System.Windows.Forms.TextBox textboxQuery;
+        private System.Windows.Forms.Button buttonSearch;
     }
 }
