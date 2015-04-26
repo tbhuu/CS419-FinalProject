@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Homework6
+namespace CS419_FinalProject
 {
     // Source buffer class
     class SourceBuffer

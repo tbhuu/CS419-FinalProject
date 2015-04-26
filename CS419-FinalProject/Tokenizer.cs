@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Homework6
+namespace CS419_FinalProject
 {
     // Tokenizing class
     class Tokenizer

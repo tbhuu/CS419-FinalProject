@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Homework6
+namespace CS419_FinalProject
 {
     // Search engine
     class SearchEngine
@@ -27,14 +27,11 @@ namespace Homework6
         // Length of document vectors in collection
         Dictionary<int, double> length;
 
-        // Automatic Global Analyzer
-        GlobalAnalyzer globalAnalyzer;
-
         // Automatic Local Analyzer
         LocalAnalyzer localAnalyzer;
 
         // Constructor
-        public SearchEngine(string indexPath, string mapPath, string lenPath, int docCount, string docPath, string docMapPath)
+        public SearchEngine(string indexPath, string mapPath, string lenPath, int docCount, string collectionPath)
         {
             this.indexPath = indexPath;
             this.mapPath = mapPath;
@@ -42,8 +39,7 @@ namespace Homework6
             this.docCount = docCount;
             this.length = new Dictionary<int, double>(docCount);
             GetVectorLength();
-            this.globalAnalyzer = new GlobalAnalyzer(indexPath, mapPath);
-            this.localAnalyzer = new LocalAnalyzer(docPath, docMapPath);
+            //this.localAnalyzer = new LocalAnalyzer(collectionPath);
         }
 
         // Get the lengths of the document vectors
@@ -61,7 +57,7 @@ namespace Homework6
         private Dictionary<string, int> Preprocess(string query)
         {
             // Tokenize the query
-            MatchCollection words = Tokenizer.TokenizeDoc(query, @"([a-z]+'?[a-z]*)");
+            MatchCollection words = Tokenizer.TokenizeDoc(query, @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+");
 
             // Get all terms and their frequencies in the query
             Dictionary<string, int> terms = new Dictionary<string, int>();
@@ -128,26 +124,6 @@ namespace Homework6
             });
 
             return result;
-        }
-
-        // Search with Query expansion using Automatic Global Analysis
-        public List<KeyValuePair<int, double>> SearchWithGlobalExpansion(string query)
-        {
-            // Preprocess the query
-            Dictionary<string, int> terms = Preprocess(query);
-
-            // For each term in query, expand it with two most related terms
-            foreach (KeyValuePair<string, int> term in terms)
-            {
-                List<KeyValuePair<string, int>> relatedTerms = globalAnalyzer.Analyze(term.Key);
-                for (int i = 1; i < Math.Min(3, relatedTerms.Count); ++i)
-                {
-                    query += " " + relatedTerms[i].Key;
-                }
-            }
-
-            // Perform retrieval with the expanded query
-            return Search(query);
         }
 
         // Search with Query expansion using Automatic Local Analysis

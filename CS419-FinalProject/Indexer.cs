@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Homework6
+namespace CS419_FinalProject
 {
     // Store disk information
     class Disk
@@ -57,7 +57,8 @@ namespace Homework6
         {
             this.path = path;
             // Read the file of stopwords
-            stopwords = GetStopwords();
+            stopwords = new HashSet<string>();
+            //stopwords = GetStopwords();
         }
 
         // Read all stopwords from file
@@ -87,34 +88,17 @@ namespace Homework6
                 File.Delete(filePath);
 
             // Count the total number of documents
-            int docCount = 0;
+            int docId = 0;
             // Read and process all documents
-            using (StreamReader sr = new StreamReader(path + "//ohsumed.87"))
+            foreach (string docPath in Directory.GetFiles(path))
             {
-                int docId = -1;
-                string data = "";
-                string docContent = "";
-                while (!sr.EndOfStream)
+                using (StreamReader sr = new StreamReader(docPath))
                 {
-                    data = sr.ReadLine();
-                    if (data.Equals(".U"))
-                    {
-                        // Start inverting
-                        if (docId != -1)
-                            SPIMI_Invert(docContent, docId, ref dict, ref count, "SPIMI_", ref blockId);
-                        // Increase the docCount
-                        ++docCount;
-                        // Get the docId
-                        docId = Convert.ToInt32(sr.ReadLine());
-                        docContent = "";
-                    }
-                    else if (data.Equals(".W"))
-                    {
-                        // Get the abstract of the document
-                        docContent = sr.ReadLine();
-                    }                   
+                    string content = sr.ReadToEnd();
+                    if (content != null)
+                        SPIMI_Invert(content, docId, ref dict, ref count, "SPIMI_", ref blockId);
+                    ++docId;
                 }
-                SPIMI_Invert(docContent, docId, ref dict, ref count, "SPIMI_", ref blockId);
             }
             // Write the remaining postings lists
             if (dict.Count > 0)
@@ -128,17 +112,17 @@ namespace Homework6
 
             // Merge all blocks
             Console.WriteLine("Merging blocks...");
-            MergeBlocks("SPIMI_", blockId, "..//..//SPIMI//index", docCount);
+            MergeBlocks("SPIMI_", blockId, "..//..//SPIMI//index", docId);
 
             Console.WriteLine("Inverted index successfully constructed.");
-            return docCount;
+            return docId;
         }
 
         // Add tokens to dictionary and postings lists
         private void SPIMI_Invert(string content, int docId, ref Dictionary<string, List<int>> dict, ref int count, string outFileName, ref int blockId)
         {
             // Tokenize the document
-            MatchCollection words = Tokenizer.TokenizeDoc(content, @"([a-z]+'?[a-z]*)");
+            MatchCollection words = Tokenizer.TokenizeDoc(content, @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+");
 
             // Add tokens to dictionary and postings lists
             foreach (var word in words)
