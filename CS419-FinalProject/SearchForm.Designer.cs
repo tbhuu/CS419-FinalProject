@@ -47,7 +47,7 @@
             // labelPreviousRunStatus
             // 
             this.labelPreviousRunStatus.AutoSize = true;
-            this.labelPreviousRunStatus.Location = new System.Drawing.Point(9, 239);
+            this.labelPreviousRunStatus.Location = new System.Drawing.Point(9, 154);
             this.labelPreviousRunStatus.Name = "labelPreviousRunStatus";
             this.labelPreviousRunStatus.Size = new System.Drawing.Size(35, 13);
             this.labelPreviousRunStatus.TabIndex = 2;
@@ -55,16 +55,16 @@
             // 
             // textboxQuery
             // 
-            this.textboxQuery.Location = new System.Drawing.Point(12, 41);
+            this.textboxQuery.Location = new System.Drawing.Point(12, 56);
             this.textboxQuery.Name = "textboxQuery";
-            this.textboxQuery.Size = new System.Drawing.Size(100, 20);
+            this.textboxQuery.Size = new System.Drawing.Size(348, 20);
             this.textboxQuery.TabIndex = 3;
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(12, 67);
+            this.buttonSearch.Location = new System.Drawing.Point(140, 92);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
+            this.buttonSearch.Size = new System.Drawing.Size(78, 44);
             this.buttonSearch.TabIndex = 4;
             this.buttonSearch.Text = "Search";
             this.buttonSearch.UseVisualStyleBackColor = true;
@@ -74,13 +74,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(372, 181);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.textboxQuery);
             this.Controls.Add(this.labelPreviousRunStatus);
             this.Controls.Add(this.buttonRunIndexer);
             this.Name = "SearchForm";
-            this.Text = "SearchForm";
+            this.Text = "Search Form";
             this.ResumeLayout(false);
             this.PerformLayout();
 

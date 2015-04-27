@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CS419_FinalProject
 {
-    class SearchResult
+    public class SearchResult
     {
         public string fileName;
         public double relevantValue;

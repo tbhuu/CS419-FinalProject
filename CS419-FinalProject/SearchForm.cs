@@ -85,7 +85,18 @@ namespace CS419_FinalProject
             List<SearchResult> result;
             if (!text.Equals("")) {
                 result = myIR.SearchQuery(text);
+                if (result != null)
+                {
+                    ResultInterface reInterface = new ResultInterface(result);
+                    reInterface.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("There's no result", "Not found", MessageBoxButtons.OK);
+                }
+                
             }
+          
         }
         #endregion
         
