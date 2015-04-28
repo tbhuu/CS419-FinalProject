@@ -34,7 +34,7 @@ namespace CS419_FinalProject
 
         public void BuildSearchEngine()
         {
-            mySearchEngine = new SearchEngine(
+            mySearchEngine = new SearchEngineASCII(
                 GlobalParameter.indexPath,
                 GlobalParameter.indexMapPath,
                 GlobalParameter.indexLengthPath,
@@ -45,7 +45,7 @@ namespace CS419_FinalProject
 
         public void BuildIndexer()
         {
-            myIndexer = new Indexer(new SPIMIndexer(resourcePath));
+            myIndexer = new Indexer(new SPIMIndexerViASCII(resourcePath));
             docCount = myIndexer.Index();
         }
 

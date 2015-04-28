@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchEngine.cs" />
+    <Compile Include="SearchEngineASCII.cs" />
     <Compile Include="SearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,7 +79,9 @@
       <DependentUpon>SearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SearchResult.cs" />
+    <Compile Include="SPIMIndexerViASCII.cs" />
     <Compile Include="Tokenizer.cs" />
+    <Compile Include="Unicode2ASCII.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
