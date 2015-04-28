@@ -85,9 +85,9 @@ namespace CS419_FinalProject
             List<SearchResult> result;
             if (!text.Equals("")) {
                 result = myIR.SearchQuery(text);
-                if (result != null)
+                if (result.Count != null)
                 {
-                    ResultInterface reInterface = new ResultInterface(result);
+                    ResultInterface reInterface = new ResultInterface(result,text);
                     reInterface.ShowDialog();
                 }
                 else

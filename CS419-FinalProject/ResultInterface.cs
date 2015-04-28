@@ -13,22 +13,23 @@ namespace CS419_FinalProject
     public partial class ResultInterface : Form
     {
         private List<SearchResult> _result;
+        private string query = "";
 
         internal List<SearchResult> Result
         {
             get { return _result; }
             set { _result = value; }
         }
-        private List<UCResultElement> listReuslt;
+      
         public ResultInterface()
         {
             InitializeComponent();
         }
-        public ResultInterface(List<SearchResult> re)
+        public ResultInterface(List<SearchResult> re,string text)
         {
             InitializeComponent();
             Result = re;
-            listReuslt = new List<UCResultElement>();
+            this.query = text;
             LoadResult(10);
         }
 
@@ -38,7 +39,7 @@ namespace CS419_FinalProject
             {
                 for (int i = k - 10; i < k; ++i)
                 {
-                    UCResultElement element = new UCResultElement(Result[i].fileName, Result[i].fileName, Result[i].relevantValue.ToString());
+                    UCResultElement element = new UCResultElement(Result[i].fileName, Result[i].fileName, Result[i].relevantValue.ToString(),this.query);
                     flowPanelResult.Controls.Add(element);
                 }
             }
@@ -46,7 +47,7 @@ namespace CS419_FinalProject
             {
                 foreach(SearchResult r in Result)
                 {
-                    UCResultElement element = new UCResultElement(r.fileName, r.fileName, r.relevantValue.ToString());
+                    UCResultElement element = new UCResultElement(r.fileName, r.fileName, r.relevantValue.ToString(),this.query);
                     flowPanelResult.Controls.Add(element);
                 }
             }
@@ -60,5 +61,7 @@ namespace CS419_FinalProject
             int  index =Int16.Parse(linkLabel.Text)*10;
             LoadResult(index);
         }
+
+       
     }
 }

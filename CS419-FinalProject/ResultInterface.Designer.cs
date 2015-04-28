@@ -39,17 +39,18 @@
             // flowPanelResult
             // 
             this.flowPanelResult.AutoScroll = true;
+            this.flowPanelResult.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowPanelResult.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowPanelResult.Location = new System.Drawing.Point(28, 13);
+            this.flowPanelResult.Location = new System.Drawing.Point(0, 0);
             this.flowPanelResult.Name = "flowPanelResult";
-            this.flowPanelResult.Size = new System.Drawing.Size(325, 281);
+            this.flowPanelResult.Size = new System.Drawing.Size(445, 294);
             this.flowPanelResult.TabIndex = 0;
             this.flowPanelResult.WrapContents = false;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(110, 323);
+            this.linkLabel1.Location = new System.Drawing.Point(139, 312);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(13, 13);
             this.linkLabel1.TabIndex = 1;
@@ -60,7 +61,7 @@
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(144, 323);
+            this.linkLabel2.Location = new System.Drawing.Point(173, 312);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(13, 13);
             this.linkLabel2.TabIndex = 2;
@@ -71,7 +72,7 @@
             // linkLabel3
             // 
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(180, 323);
+            this.linkLabel3.Location = new System.Drawing.Point(209, 312);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(13, 13);
             this.linkLabel3.TabIndex = 3;
@@ -82,7 +83,7 @@
             // linkLabel4
             // 
             this.linkLabel4.AutoSize = true;
-            this.linkLabel4.Location = new System.Drawing.Point(209, 323);
+            this.linkLabel4.Location = new System.Drawing.Point(238, 312);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(13, 13);
             this.linkLabel4.TabIndex = 4;
@@ -93,7 +94,7 @@
             // linkLabel5
             // 
             this.linkLabel5.AutoSize = true;
-            this.linkLabel5.Location = new System.Drawing.Point(241, 323);
+            this.linkLabel5.Location = new System.Drawing.Point(270, 312);
             this.linkLabel5.Name = "linkLabel5";
             this.linkLabel5.Size = new System.Drawing.Size(13, 13);
             this.linkLabel5.TabIndex = 5;
@@ -105,7 +106,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(391, 345);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(446, 338);
             this.Controls.Add(this.linkLabel5);
             this.Controls.Add(this.linkLabel4);
             this.Controls.Add(this.linkLabel3);
@@ -113,7 +115,7 @@
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.flowPanelResult);
             this.Name = "ResultInterface";
-            this.Text = "Search Result";
+            this.Text = "Result";
             this.ResumeLayout(false);
             this.PerformLayout();
 

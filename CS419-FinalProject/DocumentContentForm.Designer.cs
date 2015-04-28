@@ -28,35 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxContent = new System.Windows.Forms.TextBox();
+            this.richTextBoxContent = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // textBoxContent
+            // richTextBoxContent
             // 
-            this.textBoxContent.Location = new System.Drawing.Point(13, 13);
-            this.textBoxContent.Multiline = true;
-            this.textBoxContent.Name = "textBoxContent";
-            this.textBoxContent.ReadOnly = true;
-            this.textBoxContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxContent.ShortcutsEnabled = false;
-            this.textBoxContent.Size = new System.Drawing.Size(445, 309);
-            this.textBoxContent.TabIndex = 0;
+            this.richTextBoxContent.BackColor = System.Drawing.Color.Aquamarine;
+            this.richTextBoxContent.Location = new System.Drawing.Point(-1, -1);
+            this.richTextBoxContent.Name = "richTextBoxContent";
+            this.richTextBoxContent.ReadOnly = true;
+            this.richTextBoxContent.Size = new System.Drawing.Size(472, 335);
+            this.richTextBoxContent.TabIndex = 0;
+            this.richTextBoxContent.Text = "";
             // 
             // DocumentContentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(470, 334);
-            this.Controls.Add(this.textBoxContent);
+            this.Controls.Add(this.richTextBoxContent);
             this.Name = "DocumentContentForm";
             this.Text = "Document Content Form";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBoxContent;
+        private System.Windows.Forms.RichTextBox richTextBoxContent;
+
     }
 }
