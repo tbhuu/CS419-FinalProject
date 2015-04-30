@@ -13,22 +13,22 @@ namespace CS419_FinalProject
     class SearchEngine
     {
         // Path to the inverted index file
-        string indexPath;
+        protected string indexPath;
 
         // Path to the termId mapping file
-        string mapPath;
+        protected string mapPath;
 
         // Path to the file containing lengths of all document vectors
-        string lenPath;
+        protected string lenPath;
 
         // Number of documents in collection
-        int docCount;
+        protected int docCount;
 
         // Length of document vectors in collection
-        Dictionary<int, double> length;
+        protected Dictionary<int, double> length;
 
         // Automatic Local Analyzer
-        LocalAnalyzer localAnalyzer;
+        protected LocalAnalyzer localAnalyzer;
 
         // Constructor
         public SearchEngine(string indexPath, string mapPath, string lenPath, int docCount, string collectionPath)
@@ -43,7 +43,7 @@ namespace CS419_FinalProject
         }
 
         // Get the lengths of the document vectors
-        private void GetVectorLength()
+        protected void GetVectorLength()
         {
             SourceBuffer srcBuffer = new SourceBuffer(Disk.DISKBLOCK_SIZE, lenPath);
             while (!srcBuffer.IsCompletelyRead())
@@ -54,7 +54,7 @@ namespace CS419_FinalProject
 
         // Preprocess the query
         // Return value: A dictionary matching each selected term with its frequency in query
-        private Dictionary<string, int> Preprocess(string query)
+        protected virtual Dictionary<string, int> Preprocess(string query)
         {
             // Tokenize the query
             MatchCollection words = Tokenizer.TokenizeDoc(query, @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+");
@@ -154,7 +154,7 @@ namespace CS419_FinalProject
         }
 
         // Find the position of the given term in the inverted index
-        private bool FindPosition(string term, BinaryReader mapReader, BinaryReader indexReader)
+        protected bool FindPosition(string term, BinaryReader mapReader, BinaryReader indexReader)
         {
             int low = 0;
             int high = (Convert.ToInt32(mapReader.BaseStream.Length) >> 2) - 1;
@@ -182,7 +182,7 @@ namespace CS419_FinalProject
         }
 
         // Compute the TF value of a term in doc or query
-        private double ComputeTF(int f)
+        protected double ComputeTF(int f)
         {
             return 1 + Math.Log10(f);
         }

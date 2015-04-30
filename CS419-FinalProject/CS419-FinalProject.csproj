@@ -83,6 +83,7 @@
       <DependentUpon>ResultInterface.cs</DependentUpon>
     </Compile>
     <Compile Include="SearchEngine.cs" />
+    <Compile Include="SearchEngineASCII.cs" />
     <Compile Include="SearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,7 +91,9 @@
       <DependentUpon>SearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SearchResult.cs" />
+    <Compile Include="SPIMIndexerViASCII.cs" />
     <Compile Include="Tokenizer.cs" />
+    <Compile Include="Unicode2ASCII.cs" />
     <Compile Include="UCResultElement.cs">
       <SubType>UserControl</SubType>
     </Compile>
