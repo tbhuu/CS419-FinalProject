@@ -72,6 +72,7 @@
     <Compile Include="Indexer.cs" />
     <Compile Include="IRSystem.cs" />
     <Compile Include="LocalAnalyzer.cs" />
+    <Compile Include="LocalAnalyzerASCII.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>

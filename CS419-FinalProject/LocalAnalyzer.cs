@@ -15,13 +15,19 @@ namespace CS419_FinalProject
     class LocalAnalyzer
     {
         // Path to the document collection
-        string docPath;
+        protected string docPath;
 
         // List of stopwords
         protected HashSet<string> stopwords;
 
         // Association Matrix
-        Dictionary<string, Dictionary<string, int>> matrix;
+        protected Dictionary<string, Dictionary<string, int>> matrix;
+        
+        protected virtual string regexstring {
+            get {
+                return @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+";
+            }
+        }
 
         // Constructor
         public LocalAnalyzer(string docPath)
@@ -34,7 +40,7 @@ namespace CS419_FinalProject
         }
 
         // Read all stopwords from file
-        protected HashSet<string> GetStopwords()
+        protected virtual HashSet<string> GetStopwords()
         {
             IEnumerable<string> stopwords = File.ReadLines("..//..//Resources//Stopword//stopwords_vi.txt");
             return new HashSet<string>(stopwords);
@@ -110,7 +116,7 @@ namespace CS419_FinalProject
         protected Dictionary<string, int> Preprocess(string document)
         {
             // Tokenize the query
-            MatchCollection words = Tokenizer.TokenizeDoc(document, @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+");
+            MatchCollection words = Tokenizer.TokenizeDoc(document, regexstring);
 
             // Get all terms and their frequencies in the document
             Dictionary<string, int> terms = new Dictionary<string, int>();
@@ -129,7 +135,7 @@ namespace CS419_FinalProject
         }
 
         // Get the content of a document
-        protected string GetDocContent(int docId)
+        protected virtual string GetDocContent(int docId)
         {
             string content = "";
             string[] fileNames = Directory.GetFiles(docPath);

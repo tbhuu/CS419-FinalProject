@@ -29,7 +29,14 @@ namespace CS419_FinalProject
         private HashSet<string> GetStopwords()
         {
             IEnumerable<string> stopwords = File.ReadLines(path + "//Stopword//stopwords_vi.txt");
-            return new HashSet<string>(stopwords);
+
+            string[] stopwordarray = stopwords.ToArray<string>();
+            for (int i = 0; i < stopwordarray.Length; ++i)
+            {
+                stopwordarray[i] = Unicode2ASCII.Convert(stopwordarray[i]);
+            }
+
+            return new HashSet<string>(stopwordarray);
         }
 
         // Perform indexing using SPIMI
@@ -88,7 +95,7 @@ namespace CS419_FinalProject
         private void SPIMI_Invert(string content, int docId, ref Dictionary<string, List<int>> dict, ref int count, string outFileName, ref int blockId)
         {
             // Tokenize the document
-            MatchCollection words = Tokenizer.TokenizeDoc(content, @"[a-z]+");
+            MatchCollection words = Tokenizer.TokenizeDoc(content, @"[a-zA-Z]+");
 
             // Add tokens to dictionary and postings lists
             foreach (var word in words)
