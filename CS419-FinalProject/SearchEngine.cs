@@ -61,13 +61,23 @@ namespace CS419_FinalProject
 
             // Get all terms and their frequencies in the query
             Dictionary<string, int> terms = new Dictionary<string, int>();
-            foreach (var word in words)
+            for (int i = 0; i < words.Count; ++i)
             {
-                string term = word.ToString().ToLower();
+                string term = words[i].ToString().ToLower();
                 if (terms.ContainsKey(term))
                     ++terms[term];
                 else
                     terms.Add(term, 1);
+
+                // Get the bigram
+                if (i + 1 < words.Count)
+                {
+                    term += " " + words[i + 1].ToString().ToLower();
+                    if (terms.ContainsKey(term))
+                        terms[term] += 2;
+                    else
+                        terms.Add(term, 2);
+                }
             }
 
             return terms;
