@@ -14,14 +14,15 @@ namespace CS419_FinalProject
     public partial class UCResultElement : UserControl
     {
         private string query = "";
+        private int index;
         public UCResultElement()
         {
             InitializeComponent();
         }
 
-        public UCResultElement(string fileTile, string filePath, string fileContent,string text)
+        public UCResultElement(string fileTile, string filePath, string fileContent,string text, int index = -1)
         {
-            
+            this.index = index;
             InitializeComponent();
             this.query = text;
             Preprocessing(fileTile,filePath,fileContent);
@@ -40,8 +41,26 @@ namespace CS419_FinalProject
             }
         }
 
+        #region ElementClickEvent
+        public delegate void ElementClickedEventHandler(Object sender, ElementClickEventArgs e);
+        public event ElementClickedEventHandler ElementClicked;
+
+        public class ElementClickEventArgs : EventArgs
+        {
+            public int index;
+            public ElementClickEventArgs(int index)
+                : base()
+            {
+                this.index = index;
+            }
+        }
+        #endregion
+
         private void FileName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (this.ElementClicked != null)
+                this.ElementClicked(this, new ElementClickEventArgs(this.index));
+
             string docPath = this.FilePath.Text;
             string fileName = docPath.Substring(16);
             using (StreamReader sr = new StreamReader(docPath))

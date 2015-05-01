@@ -21,14 +21,14 @@ namespace CS419_FinalProject
         {
             this.path = path;
             // Read the file of stopwords
-            stopwords = new HashSet<string>();
-            //stopwords = GetStopwords();
+            //stopwords = new HashSet<string>();
+            stopwords = GetStopwords();
         }
 
         // Read all stopwords from file
         private HashSet<string> GetStopwords()
         {
-            string[] stopwords = File.ReadAllText(path + "//stopwords_en.txt").Split();
+            IEnumerable<string> stopwords = File.ReadLines(path + "//Stopword//stopwords_vi.txt");
             return new HashSet<string>(stopwords);
         }
 

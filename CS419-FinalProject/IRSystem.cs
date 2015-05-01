@@ -34,18 +34,17 @@ namespace CS419_FinalProject
 
         public void BuildSearchEngine()
         {
-            mySearchEngine = new SearchEngineASCII(
+            mySearchEngine = new SearchEngine(
                 GlobalParameter.indexPath,
                 GlobalParameter.indexMapPath,
                 GlobalParameter.indexLengthPath,
                 docCount,
-                //TODO: no groundtrust
-                "..//..//Resources//ohsumed.87");
+                "..//..//Resources//");
         }
 
         public void BuildIndexer()
         {
-            myIndexer = new Indexer(new SPIMIndexerViASCII(resourcePath));
+            myIndexer = new Indexer(new SPIMIndexer(resourcePath));
             docCount = myIndexer.Index();
         }
 
@@ -69,6 +68,26 @@ namespace CS419_FinalProject
                 for (int i = 0; i < result.Count; ++i)
                 {
                     returnresult.Add(new SearchResult(docPaths[result[i].Key],result[i].Value));
+                }
+            }
+            else
+                Console.WriteLine("Result: Not found!");
+            return returnresult;
+        }
+
+        public List<SearchResult> ExpandQuery(string query, int[] items)
+        {
+            // Search and output the result
+            List<KeyValuePair<int, double>> result = mySearchEngine.ExpandQuery(query, items);
+
+            List<SearchResult> returnresult = new List<SearchResult>();
+
+            if (result.Count > 0)
+            {
+                // Display the ranked list
+                for (int i = 0; i < result.Count; ++i)
+                {
+                    returnresult.Add(new SearchResult(docPaths[result[i].Key], result[i].Value));
                 }
             }
             else

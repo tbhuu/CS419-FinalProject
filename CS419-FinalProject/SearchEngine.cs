@@ -39,7 +39,7 @@ namespace CS419_FinalProject
             this.docCount = docCount;
             this.length = new Dictionary<int, double>(docCount);
             GetVectorLength();
-            //this.localAnalyzer = new LocalAnalyzer(collectionPath);
+            this.localAnalyzer = new LocalAnalyzer(collectionPath);
         }
 
         // Get the lengths of the document vectors
@@ -126,6 +126,34 @@ namespace CS419_FinalProject
             return result;
         }
 
+        public List<KeyValuePair<int, double>> ExpandQuery(string query, int[] items)
+        {
+            // Search with the query to get the top ranked retrieved documents
+            List<KeyValuePair<int, double>> originalResult = Search(query);
+
+            // Analyze the top ranked retrieved documents to compute the Association Matrix
+            localAnalyzer.Analyze(originalResult, items);
+
+            // Preprocess the query
+            Dictionary<string, int> terms = Preprocess(query);
+
+            // For each term in query, expand it with two most related terms
+            foreach (KeyValuePair<string, int> term in terms)
+            {
+                List<KeyValuePair<string, int>> relatedTerms = localAnalyzer.GetRelatedTerms(term.Key);
+                for (int i = 0, count = 0; i < relatedTerms.Count && count < 3; ++i)
+                {
+                    if (!terms.Keys.Contains(relatedTerms[i].Key)) { 
+                        query += " " + relatedTerms[i].Key;
+                        ++count;
+                    }
+                }
+            }
+
+            // Perform retrieval with the expanded query
+            return Search(query);
+        }
+
         // Search with Query expansion using Automatic Local Analysis
         // Apply Pseudo Feedback to determine the top relevant documents
         public List<KeyValuePair<int, double>> SearchWithLocalExpansion(string query)
@@ -143,9 +171,13 @@ namespace CS419_FinalProject
             foreach (KeyValuePair<string, int> term in terms)
             {
                 List<KeyValuePair<string, int>> relatedTerms = localAnalyzer.GetRelatedTerms(term.Key);
-                for (int i = 1; i < Math.Min(3, relatedTerms.Count); ++i)
+                for (int i = 0, count = 0; i < relatedTerms.Count && count < 3; ++i)
                 {
-                    query += " " + relatedTerms[i].Key;
+                    if (!terms.Keys.Contains(relatedTerms[i].Key))
+                    {
+                        query += " " + relatedTerms[i].Key;
+                        ++count;
+                    }
                 }
             }
 

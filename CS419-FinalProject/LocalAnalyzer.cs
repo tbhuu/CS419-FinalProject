@@ -17,34 +17,71 @@ namespace CS419_FinalProject
         // Path to the document collection
         string docPath;
 
-        // Path to the doc mapping file
-        string mapPath;
-
         // List of stopwords
-        private HashSet<string> stopwords;
+        protected HashSet<string> stopwords;
 
         // Association Matrix
         Dictionary<string, Dictionary<string, int>> matrix;
 
         // Constructor
-        public LocalAnalyzer(string docPath, string mapPath)
+        public LocalAnalyzer(string docPath)
         {
             this.docPath = docPath;
-            this.mapPath = mapPath;
             this.matrix = new Dictionary<string, Dictionary<string, int>>();
             // Read the file of stopwords
             stopwords = GetStopwords();
+            //stopwords = new HashSet<string>();
         }
 
         // Read all stopwords from file
-        private HashSet<string> GetStopwords()
+        protected HashSet<string> GetStopwords()
         {
-            string[] stopwords = File.ReadAllText("..//..//Resources//stopwords_en.txt").Split();
+            IEnumerable<string> stopwords = File.ReadLines("..//..//Resources//Stopword//stopwords_vi.txt");
             return new HashSet<string>(stopwords);
         }
 
+        public void Analyze(List<KeyValuePair<int, double>> searchResult, int[] items = null)
+        {
+            if (items == null) {
+                AnalyzeTopResult(searchResult);
+            }
+            else
+            {
+                AnalyzeUserClicker(searchResult, items);
+            }
+        }
+
+        //Analyse with items list by user clicker
+        protected void AnalyzeUserClicker(List<KeyValuePair<int, double>> searchResult, int[] items)
+        {
+            matrix.Clear();
+            if (items == null)
+                return;
+
+            for (int i = 0; i < items.Length; ++i)
+            {
+                // Get the content of the document
+                string document = GetDocContent(searchResult[items[i]].Key);
+                // Compute the frequency of each term in document
+                Dictionary<string, int> terms = Preprocess(document);
+                // Compute the correlation factor between every pair of terms in the document
+                foreach (KeyValuePair<string, int> term in terms)
+                {
+                    if (!matrix.ContainsKey(term.Key))
+                        matrix.Add(term.Key, new Dictionary<string, int>());
+                    foreach (KeyValuePair<string, int> relatedterm in terms)
+                    {
+                        if (!matrix[term.Key].ContainsKey(relatedterm.Key))
+                            matrix[term.Key].Add(relatedterm.Key, term.Value * relatedterm.Value);
+                        matrix[term.Key][relatedterm.Key] += term.Value * relatedterm.Value;
+                    }
+                }
+            }
+
+        }
+
         // Analyze the top 5 retrieved documents to compute the local Association Matrix
-        public void Analyze(List<KeyValuePair<int, double>> searchResult)
+        protected void AnalyzeTopResult(List<KeyValuePair<int, double>> searchResult)
         {
             matrix.Clear();
             for (int i = 0; i < Math.Min(4, searchResult.Count); ++i)
@@ -70,10 +107,10 @@ namespace CS419_FinalProject
 
         // Preprocess the relevant documents
         // Return value: A dictionary matching each selected term with its frequency
-        private Dictionary<string, int> Preprocess(string document)
+        protected Dictionary<string, int> Preprocess(string document)
         {
             // Tokenize the query
-            MatchCollection words = Tokenizer.TokenizeDoc(document, @"([a-z]+'?[a-z]*)");
+            MatchCollection words = Tokenizer.TokenizeDoc(document, @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+");
 
             // Get all terms and their frequencies in the document
             Dictionary<string, int> terms = new Dictionary<string, int>();
@@ -92,42 +129,15 @@ namespace CS419_FinalProject
         }
 
         // Get the content of a document
-        private string GetDocContent(int docId)
+        protected string GetDocContent(int docId)
         {
-            using (BinaryReader mapReader = new BinaryReader(File.Open(mapPath, FileMode.Open)))
+            string content = "";
+            string[] fileNames = Directory.GetFiles(docPath);
+            using (StreamReader rd = new StreamReader(fileNames[docId]))
             {
-                using (BinaryReader docReader = new BinaryReader(File.Open(docPath, FileMode.Open)))
-                {
-                    int low = 0;
-                    int high = (Convert.ToInt32(mapReader.BaseStream.Length) / 12) - 1;
-                    int value;
-
-                    // Binary search
-                    while (high >= low)
-                    {
-                        int mid = ((low + high) >> 1) * 12;
-                        mapReader.BaseStream.Position = mid;
-                        value = mapReader.ReadInt32();
-                        if (docId.Equals(value))
-                        {
-                            string document = "";
-                            int docPosition = mapReader.ReadInt32();
-                            if (docPosition != -1)
-                            {
-                                docReader.BaseStream.Position = docPosition;
-                                document = new string(docReader.ReadChars(mapReader.ReadInt32()));
-                            }
-                            return document;
-                        }
-                        else if (docId.CompareTo(value) > 0)
-                            low = (mid / 12) + 1;
-                        else
-                            high = (mid / 12) - 1;
-                    }
-                }
+                content = rd.ReadToEnd();
             }
-
-            return "";
+            return content;
         }
 
         // Get the list of related terms for query expansion

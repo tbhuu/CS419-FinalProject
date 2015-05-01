@@ -35,11 +35,13 @@ namespace CS419_FinalProject
 
         private void DisableForm() {
             buttonRunIndexer.Enabled = false;
+            buttonSearch.Enabled = false;
         }
 
         private void EnableForm()
         {
             buttonRunIndexer.Enabled = true;
+            buttonSearch.Enabled = true;
         }
 
         public enum IRStatus{
@@ -72,6 +74,7 @@ namespace CS419_FinalProject
             Invoke((Action)delegate()
             {
                 EnableForm();
+                labelPreviousRunStatus.Text = "Ready";
             });
 
             });
@@ -79,15 +82,20 @@ namespace CS419_FinalProject
             newThread.Start();
         }
 
+        ResultInterface reInterface;
+
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            if (textboxQuery.Lines.Count<string>() < 1)
+                return;
             string text = textboxQuery.Lines[0].Trim();
             List<SearchResult> result;
             if (!text.Equals("")) {
                 result = myIR.SearchQuery(text);
-                if (result.Count != null)
+                if (result.Count > 0)
                 {
-                    ResultInterface reInterface = new ResultInterface(result,text);
+                    reInterface = new ResultInterface(result,text);
+                    reInterface.RefreshEvent += RefreshEvent;
                     reInterface.ShowDialog();
                 }
                 else
@@ -98,6 +106,14 @@ namespace CS419_FinalProject
             }
           
         }
+
+        void RefreshEvent(object sender, ResultInterface.RefreshEventArgs e)
+        {
+            List<SearchResult> result;
+            result = myIR.ExpandQuery(e.query, e.items);
+            reInterface.Result = result;
+        }
+        
         #endregion
         
     }
