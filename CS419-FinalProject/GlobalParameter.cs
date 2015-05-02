@@ -17,5 +17,11 @@ namespace CS419_FinalProject
         public static string indexMapPath = "..//..//SPIMI//index_map.txt";
 
         public static string indexLengthPath = "..//..//SPIMI//index_length.txt";
+
+        public static string indexPathvi = "..//..//SPIMI//indexvi.txt";
+
+        public static string indexMapPathvi = "..//..//SPIMI//indexvi_map.txt";
+
+        public static string indexLengthPathvi = "..//..//SPIMI//indexvi_length.txt";
     }
 }

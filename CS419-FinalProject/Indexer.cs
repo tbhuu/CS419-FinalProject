@@ -57,7 +57,6 @@ namespace CS419_FinalProject
         {
             this.path = path;
             // Read the file of stopwords
-            //stopwords = new HashSet<string>();
             stopwords = GetStopwords();
         }
 
@@ -76,7 +75,8 @@ namespace CS419_FinalProject
             Console.WriteLine("Index Construction using Single-pass in-memory Indexing");
 
             // Initialize the dictionary
-            Dictionary<string, List<int>> dict = new Dictionary<string, List<int>>(20011);
+
+            Dictionary<string, List<int>> dict = new Dictionary<string, List<int>>(252143);
             // Count the size (in bytes) of the values (term, docId, frequency) added to dictionary and postings lists
             int count = 0;
             // Count the number of blocks written to disk
@@ -85,7 +85,12 @@ namespace CS419_FinalProject
             // Delete old files
             string[] filePaths = Directory.GetFiles("..//..//SPIMI//");
             foreach (string filePath in filePaths)
+            {
+                if (filePath.Contains("indexvi.txt") || filePath.Contains("indexvi_map.txt") || filePath.Contains("indexvi_length.txt"))
+                    continue;
                 File.Delete(filePath);
+            }
+                
 
             // Count the total number of documents
             int docId = 0;
@@ -121,44 +126,38 @@ namespace CS419_FinalProject
         // Add tokens to dictionary and postings lists
         private void SPIMI_Invert(string content, int docId, ref Dictionary<string, List<int>> dict, ref int count, string outFileName, ref int blockId)
         {
+            // Initialize the word pattern
+            string pattern = @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+";
+
             // Tokenize the document
-            MatchCollection words = Tokenizer.TokenizeDoc(content, @"[A-ZÀÁẠÃẢĂẮẰẶẴẲÂẤẦẬẪẨÉÈẸẺẼÊỀẾỆỂỄĐÍÌỊỈĨÝỲỴỶỸÙÚỤŨỦƯỪỨỰỮỬÓÒỌỎÕƠỜỚỞỠỢÔỐỒỘỔỖa-zàáạãảăắằặẵẳâấầậẫẩéèẹẻẽêềếệểễđíìịỉĩýỳỵỷỹùúụũủưừứựữửóòọỏõơờớởỡợôốồộổỗ]+");
+
+            MatchCollection words = Tokenizer.TokenizeDoc(content, pattern);
 
             // Add tokens to dictionary and postings lists
-            foreach (var word in words)
+
+            for (int i = 0; i < words.Count; ++i)
             {
-                string term = word.ToString().ToLower();
-                // Remove stopwords
-                if (stopwords.Contains(term))
-                    continue;
-                // Add term to dictionary
-                if (!dict.ContainsKey(term))
+
+                // Get the term
+                string term = words[i].ToString().ToLower();
+                // Add term to dictonary if it is not stopword
+                if (!stopwords.Contains(term))
+                    AddTermToDictionary(term, docId, 1, dict, ref count);
+
+                // Get the bigram
+                if (i + 1 < words.Count)
                 {
-                    dict.Add(term, new List<int>(200));
-                    count += term.Length << 1;
+
+                    term += " " + words[i + 1].ToString().ToLower();
+                    if (!stopwords.Contains(term))
+                        AddTermToDictionary(term, docId, 2, dict, ref count);
                 }
-                // Add posting directly to its postings list
-                bool found = false;
-                for (int i = 0; i < dict[term].Count; i += 2)
-                {
-                    // If docId already exist, increase the term frequency in doc
-                    if (dict[term][i] == docId)
-                    {
-                        ++dict[term][i + 1];
-                        found = true;
-                        break;
-                    }
-                }
-                // If docId does not exist, add it to postings list
-                if (!found)
-                {
-                    dict[term].Add(docId);
-                    dict[term].Add(1);
-                    count += 8;
-                }
+
             }
-            // We assume that only 1-2MB of memory is available
-            if (count >= 1048576)
+
+
+            // We assume that only 10MB of memory is available
+            if (count >= 10485760)
             {
                 Console.WriteLine("Block " + blockId.ToString() + ": Finished!");
                 // Sort terms
@@ -171,6 +170,37 @@ namespace CS419_FinalProject
                 count = 0;
                 ++blockId;
             }
+        }
+
+        // Add a term with a specific weight to the dictionary 
+        private int AddTermToDictionary(string term, int docId, int weight, Dictionary<string, List<int>> dict, ref int count)
+        {
+            // Add term to dictionary
+            if (!dict.ContainsKey(term))
+            {
+                dict.Add(term, new List<int>(200));
+                count += term.Length << 1;
+            }
+            // Add posting directly to its postings list
+            bool found = false;
+            for (int i = 0; i < dict[term].Count; i += 2)
+            {
+                // If docId already exist, increase the term frequency in doc
+                if (dict[term][i] == docId)
+                {
+                    dict[term][i + 1] += weight;
+                    found = true;
+                    break;
+                }
+            }
+            // If docId does not exist, add it to postings list
+            if (!found)
+            {
+                dict[term].Add(docId);
+                dict[term].Add(weight);
+                count += 8;
+            }
+            return count;
         }
 
         // Write the index of a block to disk in binary

@@ -67,8 +67,9 @@ namespace CS419_FinalProject
             //So the UI do not frozen
             Thread newThread = new Thread(() => {
 
-            myIR.BuildIndexer();
-            myIR.BuildSearchEngine();
+            myIR.BuildBothIndexerAndSearchEngine();
+            //myIR.BuildIndexer();
+            //myIR.BuildSearchEngine();
 
             //Update UI thread from working thread
             Invoke((Action)delegate()
