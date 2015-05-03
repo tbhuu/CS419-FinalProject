@@ -17,15 +17,7 @@ namespace CS419_FinalProject
 
         protected override HashSet<string> GetStopwords()
         {
-            IEnumerable<string> stopwords = File.ReadLines("..//..//Resources//Stopword//stopwords_vi.txt");
-
-            string[] stopwordarray = stopwords.ToArray<string>();
-            for (int i = 0; i < stopwordarray.Length; ++i)
-            {
-                stopwordarray[i] = Unicode2ASCII.Convert(stopwordarray[i]);
-            }
-
-            return new HashSet<string>(stopwordarray);
+            return new HashSet<string>();
         }
 
         protected override string GetDocContent(int docId)
